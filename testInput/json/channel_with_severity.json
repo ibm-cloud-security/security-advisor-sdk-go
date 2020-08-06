@@ -3,5 +3,5 @@
     "type": "Webhook",
     "description": "channel with custom severity",
     "endpoint": "https://example.com",
-    "severity": ["low", "high"]
+    "severity": ["low", "high", "critical"]
   }

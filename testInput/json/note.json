@@ -16,7 +16,7 @@
         }
     ],
 	"finding":{
-        "severity": "LOW",
+        "severity": "CRITICAL",
         "next_steps": [
             {
                 "title": "string",
