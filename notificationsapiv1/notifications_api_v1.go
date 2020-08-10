@@ -50,17 +50,14 @@ func NewNotificationsApiV1UsingExternalConfig(options *NotificationsApiV1Options
 		options.ServiceName = DefaultServiceName
 	}
 
-	fmt.Println(options.ServiceName)
 	if options.Authenticator == nil {
 		options.Authenticator, err = core.GetAuthenticatorFromEnvironment(options.ServiceName)
-		fmt.Println(err)
 		if err != nil {
 			return
 		}
 	}
 
 	notificationsApi, err = NewNotificationsApiV1(options)
-	fmt.Println(err)
 	if err != nil {
 		return
 	}
@@ -607,6 +604,9 @@ type ChannelResponseDefinitionAlertSourceItem struct {
 // ChannelResponseDefinitionSeverity : Severity of the notification.
 type ChannelResponseDefinitionSeverity struct {
 
+	// Critical Severity.
+	Critical *bool `json:"critical,omitempty"`
+
 	// High Severity.
 	High *bool `json:"high,omitempty"`
 
@@ -654,9 +654,10 @@ const (
 
 // Constants associated with the CreateNotificationChannelOptions.Severity property.
 const (
-	CreateNotificationChannelOptions_Severity_High   = "high"
-	CreateNotificationChannelOptions_Severity_Low    = "low"
-	CreateNotificationChannelOptions_Severity_Medium = "medium"
+	CreateNotificationChannelOptions_Severity_Critical = "critical"
+	CreateNotificationChannelOptions_Severity_High     = "high"
+	CreateNotificationChannelOptions_Severity_Low      = "low"
+	CreateNotificationChannelOptions_Severity_Medium   = "medium"
 )
 
 // NewCreateNotificationChannelOptions : Instantiate CreateNotificationChannelOptions
@@ -873,6 +874,9 @@ type GetChannelResponseChannelAlertSource struct {
 
 // GetChannelResponseChannelSeverity : Severity of the notification.
 type GetChannelResponseChannelSeverity struct {
+
+	// Critical Severity.
+	Critical *bool `json:"critical,omitempty"`
 
 	// High Severity.
 	High *bool `json:"high,omitempty"`
@@ -1123,9 +1127,10 @@ const (
 
 // Constants associated with the UpdateNotificationChannelOptions.Severity property.
 const (
-	UpdateNotificationChannelOptions_Severity_High   = "high"
-	UpdateNotificationChannelOptions_Severity_Low    = "low"
-	UpdateNotificationChannelOptions_Severity_Medium = "medium"
+	UpdateNotificationChannelOptions_Severity_Critical = "critical"
+	UpdateNotificationChannelOptions_Severity_High     = "high"
+	UpdateNotificationChannelOptions_Severity_Low      = "low"
+	UpdateNotificationChannelOptions_Severity_Medium   = "medium"
 )
 
 // NewUpdateNotificationChannelOptions : Instantiate UpdateNotificationChannelOptions

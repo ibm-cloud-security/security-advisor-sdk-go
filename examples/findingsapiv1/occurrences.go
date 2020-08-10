@@ -25,16 +25,9 @@ func CreateFindingOccurrence() {
 	ID := "test-finding"
 	noteName := accountID + "/providers/custom-provider/notes/custom-note"
 	kind := "FINDING"
-	remediationTitle := "title"
-	remediationURL := "https://hello.world"
-	nextStep := []findingsapiv1.RemediationStep{{Title: &remediationTitle, URL: &remediationURL}}
-	severity := "MEDIUM"
-	certainity := "LOW"
-	finding := findingsapiv1.Finding{Severity: &severity, Certainty: &certainity, NextSteps: nextStep}
-	region := "us-south"
-	resourceType := "my_cluster"
-	resourceName := "test"
-	context := findingsapiv1.Context{Region: &region, ResourceType: &resourceType, ResourceName: &resourceName}
+	nextStep := []findingsapiv1.RemediationStep{{Title: core.StringPtr("title"), URL: core.StringPtr("https://hello.world")}}
+	finding := findingsapiv1.Finding{Severity: core.StringPtr("CRITICAL"), Certainty: core.StringPtr("LOW"), NextSteps: nextStep}
+	context := findingsapiv1.Context{Region: core.StringPtr("us-south"), ResourceType: core.StringPtr("my_cluster"), ResourceName: core.StringPtr("test")}
 
 	var createOccurrenceOptions = service.NewCreateOccurrenceOptions(accountID, providerID, noteName, kind, ID)
 	createOccurrenceOptions.SetHeaders(headers)

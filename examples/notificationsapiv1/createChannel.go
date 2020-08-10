@@ -25,7 +25,7 @@ func CreateChannel() {
 	channelName := "sdktest_channel_exmpl"
 	endpoint := "https://ss.ss"
 	channelType := "Webhook"
-	severity := []string{notificationsapiv1.CreateNotificationChannelOptions_Severity_Low, notificationsapiv1.CreateNotificationChannelOptions_Severity_High}
+	severity := []string{notificationsapiv1.CreateNotificationChannelOptions_Severity_Low, notificationsapiv1.CreateNotificationChannelOptions_Severity_High, notificationsapiv1.CreateNotificationChannelOptions_Severity_Critical}
 
 	var alertSource []notificationsapiv1.NotificationChannelAlertSourceItem
 	source, _ := service.NewNotificationChannelAlertSourceItem("ATA")

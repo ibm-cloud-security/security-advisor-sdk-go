@@ -26,11 +26,9 @@ func CreateFindingNote() {
 	kind := "FINDING"
 	id := "exampleNote"
 	reportedBy, _ := service.NewReporter("hello", "https://ss.ss")
-	remediationTitle := "title"
-	remediationURL := "https://hello.world"
-	nextStep := []findingsapiv1.RemediationStep{{Title: &remediationTitle, URL: &remediationURL}}
-	severity := "MEDIUM"
-	finding := findingsapiv1.FindingType{Severity: &severity, NextSteps: nextStep}
+	nextStep := []findingsapiv1.RemediationStep{{Title: core.StringPtr("title"), URL: core.StringPtr("https://hello.world")}}
+	severity := "CRITICAL"
+	finding := findingsapiv1.FindingType{Severity: core.StringPtr("CRITICAL"), NextSteps: nextStep}
 
 	var createNoteOptions = service.NewCreateNoteOptions(accountID, providerID, shortDescription, longDescription, kind, id, reportedBy)
 	createNoteOptions.SetHeaders(headers)
@@ -38,15 +36,14 @@ func CreateFindingNote() {
 
 	result, response, operationErr := service.CreateNote(createNoteOptions)
 	if operationErr != nil {
+		fmt.Println(operationErr)
 		fmt.Println("Failed to create note: ", operationErr)
-		fmt.Println(response.Result)
 	} else {
 		fmt.Println(response.StatusCode)
 		fmt.Println(*result.ID)
 		fmt.Println(*result.Kind)
 		fmt.Println(*result.ShortDescription)
 	}
-
 }
 
 //CreateKPINote creates a note of kind KPI

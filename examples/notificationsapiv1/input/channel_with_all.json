@@ -5,6 +5,6 @@
     "endpoint": "https://ss.ss",
     "account_id": "<AccouniID>",
     "alertSource": [{"provider_name": "VA", "finding_types": ["ALL"]}, {"provider_name": "CERT", "finding_types": ["expired_cert", "expiring_1day_cert"]}],
-    "severity": ["low", "high"],
+    "severity": ["low", "high", "critical"],
     "enabled": true
   }
