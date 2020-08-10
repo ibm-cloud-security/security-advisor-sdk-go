@@ -27,7 +27,6 @@ func CreateFindingNote() {
 	id := "exampleNote"
 	reportedBy, _ := service.NewReporter("hello", "https://ss.ss")
 	nextStep := []findingsapiv1.RemediationStep{{Title: core.StringPtr("title"), URL: core.StringPtr("https://hello.world")}}
-	severity := "CRITICAL"
 	finding := findingsapiv1.FindingType{Severity: core.StringPtr("CRITICAL"), NextSteps: nextStep}
 
 	var createNoteOptions = service.NewCreateNoteOptions(accountID, providerID, shortDescription, longDescription, kind, id, reportedBy)
