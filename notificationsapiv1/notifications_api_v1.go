@@ -213,7 +213,7 @@ func (notificationsApi *NotificationsApiV1) CreateNotificationChannel(createNoti
 		body["enabled"] = createNotificationChannelOptions.Enabled
 	}
 	if createNotificationChannelOptions.AlertSource != nil {
-		body["alertSource"] = createNotificationChannelOptions.AlertSource
+		body["alert_source"] = createNotificationChannelOptions.AlertSource
 	}
 	_, err = builder.SetBodyContentJSON(body)
 	if err != nil {
@@ -443,7 +443,7 @@ func (notificationsApi *NotificationsApiV1) UpdateNotificationChannel(updateNoti
 		body["enabled"] = updateNotificationChannelOptions.Enabled
 	}
 	if updateNotificationChannelOptions.AlertSource != nil {
-		body["alertSource"] = updateNotificationChannelOptions.AlertSource
+		body["alert_source"] = updateNotificationChannelOptions.AlertSource
 	}
 	_, err = builder.SetBodyContentJSON(body)
 	if err != nil {
@@ -640,7 +640,7 @@ type CreateNotificationChannelOptions struct {
 	// Channel is enabled or not. Default is disabled.
 	Enabled *bool `json:"enabled,omitempty"`
 
-	AlertSource []NotificationChannelAlertSourceItem `json:"alertSource,omitempty"`
+	AlertSource []NotificationChannelAlertSourceItem `json:"alert_source,omitempty"`
 
 	// Allows users to set headers to be GDPR compliant
 	Headers map[string]string
@@ -825,7 +825,7 @@ type GetChannelResponseChannel struct {
 	// Channel is enabled or not. Default is disabled.
 	Enabled *bool `json:"enabled,omitempty"`
 
-	AlertSource []GetChannelResponseChannelAlertSource `json:"alertSource,omitempty"`
+	AlertSource []GetChannelResponseChannelAlertSource `json:"alert_source,omitempty"`
 
 	Frequency *string `json:"frequency,omitempty"`
 }
@@ -1113,7 +1113,7 @@ type UpdateNotificationChannelOptions struct {
 	// Channel is enabled or not. Default is disabled.
 	Enabled *bool `json:"enabled,omitempty"`
 
-	AlertSource []NotificationChannelAlertSourceItem `json:"alertSource,omitempty"`
+	AlertSource []NotificationChannelAlertSourceItem `json:"alert_source,omitempty"`
 
 	// Allows users to set headers to be GDPR compliant
 	Headers map[string]string
@@ -1234,7 +1234,7 @@ type ChannelResponseDefinition struct {
 	// Channel is enabled or not. Default is disabled.
 	Enabled *bool `json:"enabled,omitempty"`
 
-	AlertSource []ChannelResponseDefinitionAlertSourceItem `json:"alertSource,omitempty"`
+	AlertSource []ChannelResponseDefinitionAlertSourceItem `json:"alert_source,omitempty"`
 
 	Frequency *string `json:"frequency,omitempty"`
 }
@@ -1252,7 +1252,7 @@ type CreateChannelsResponse struct {
 	ChannelID *string `json:"channel_id,omitempty"`
 
 	// response code.
-	StatusCode *int64 `json:"statusCode,omitempty"`
+	StatusCode *int64 `json:"status_code,omitempty"`
 }
 
 // DeleteChannelResponse : Response of deleted channel.
@@ -1279,7 +1279,7 @@ type ListChannelsResponse struct {
 
 // PublicKeyResponse : PublicKeyResponse struct
 type PublicKeyResponse struct {
-	PublicKey *string `json:"publicKey" validate:"required"`
+	PublicKey *string `json:"public_key" validate:"required"`
 }
 
 // TestChannelResponse : Response of deleted channel.
@@ -1296,5 +1296,5 @@ type UpdateChannelResponse struct {
 	ChannelID *string `json:"channel_id,omitempty"`
 
 	// response code.
-	StatusCode *int64 `json:"statusCode,omitempty"`
+	StatusCode *int64 `json:"status_code,omitempty"`
 }

@@ -405,9 +405,9 @@ func TestGetChannelFailureWithInvalidId(t *testing.T) {
 
 	t.Log("Failed to get channel: ", operationErr)
 	assert.Nil(t, result)
-	assert.Equal(t, resp.StatusCode, 500)
+	assert.Equal(t, resp.StatusCode, 404)
 	assert.NotNil(t, operationErr)
-	assert.Equal(t, operationErr.Error(), "Internal Server Error")
+	assert.Equal(t, operationErr.Error(), "Channels not found.")
 
 }
 
@@ -524,9 +524,9 @@ func TestTestChannelFailureWithInvalidId(t *testing.T) {
 
 	t.Log("Failed to get channel: ", operationErr)
 	assert.Nil(t, result)
-	assert.Equal(t, resp.StatusCode, 500)
+	assert.Equal(t, resp.StatusCode, 404)
 	assert.NotNil(t, operationErr)
-	assert.Equal(t, operationErr.Error(), "Internal Server Error")
+	assert.Equal(t, operationErr.Error(), "Channels not found.")
 
 }
 
