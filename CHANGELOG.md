@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/ibm-cloud-security/security-advisor-sdk-go/compare/v1.1.0...v1.1.1) (2021-03-31)
+
+
+### Bug Fixes
+
+* **release:** Fix openapi validation errors ([56c29e5](https://github.com/ibm-cloud-security/security-advisor-sdk-go/commit/56c29e5c599383a1094c0b9b0fcb87e1c506a9a8))
+
 # [1.1.0](https://github.com/ibm-cloud-security/security-advisor-sdk-go/compare/v1.0.3...v1.1.0) (2020-08-19)
 
 
