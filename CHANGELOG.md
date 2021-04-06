@@ -1,3 +1,13 @@
+# [2.0.0](https://github.com/ibm-cloud-security/security-advisor-sdk-go/compare/v1.1.1...v2.0.0) (2021-04-06)
+
+
+* Merge pull request #23 from ibm-cloud-security/9775 ([6ce0361](https://github.com/ibm-cloud-security/security-advisor-sdk-go/commit/6ce036121c19162781e53f2b531d3cbd3ec3781a)), closes [#23](https://github.com/ibm-cloud-security/security-advisor-sdk-go/issues/23)
+
+
+### BREAKING CHANGES
+
+* Align get channel response with list response
+
 ## [1.1.1](https://github.com/ibm-cloud-security/security-advisor-sdk-go/compare/v1.1.0...v1.1.1) (2021-03-31)
 
 
