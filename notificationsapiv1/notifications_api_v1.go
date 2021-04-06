@@ -802,92 +802,6 @@ func (options *DeleteNotificationChannelsOptions) SetHeaders(param map[string]st
 	return options
 }
 
-// GetChannelResponseChannel : Response including channels.
-type GetChannelResponseChannel struct {
-
-	// unique id of the channel.
-	ChannelID *string `json:"channel_id,omitempty"`
-
-	Name *string `json:"name,omitempty"`
-
-	// A one sentence description of this `Channel`.
-	Description *string `json:"description,omitempty"`
-
-	// Type of callback URL.
-	Type *string `json:"type,omitempty"`
-
-	// Severity of the notification.
-	Severity *GetChannelResponseChannelSeverity `json:"severity,omitempty"`
-
-	// The callback URL which receives the notification.
-	Endpoint *string `json:"endpoint,omitempty"`
-
-	// Channel is enabled or not. Default is disabled.
-	Enabled *bool `json:"enabled,omitempty"`
-
-	AlertSource []GetChannelResponseChannelAlertSource `json:"alert_source,omitempty"`
-
-	Frequency *string `json:"frequency,omitempty"`
-}
-
-// Constants associated with the GetChannelResponseChannel.Type property.
-// Type of callback URL.
-const (
-	GetChannelResponseChannel_Type_Webhook = "Webhook"
-)
-
-// GetChannelResponseChannelAlertSource : The alert sources. They identify the providers and their finding types which makes the findings available to Security
-// Advisor.
-type GetChannelResponseChannelAlertSource struct {
-
-	// Below is a list of builtin providers that you can select in addition to the ones you obtain by calling Findings API
-	// /v1/{account_id}/providers :
-	//  | provider_name | The source they represent |
-	//  |-----|-----|
-	//  | VA  | Vulnerable image findings|
-	//  | NA  | Network Insights findings|
-	//  | ATA | Activity Insights findings|
-	//  | CERT | Certificate Manager findings|
-	//  | ALL | Special provider name to represent all the providers. Its mutually exclusive with other providers meaning
-	// either you choose ALL or you don't|.
-	ProviderName *string `json:"provider_name,omitempty"`
-
-	// An array of the finding types of the provider_name or "ALL" to specify all finding types under that provider Below
-	// is a list of supported finding types for each built in providers
-	// | provider_name | Supported finding types |
-	// |-----|-----|
-	// | VA  | "image_with_vulnerabilities", "image_with_config_issues"|
-	// | NA  | "anonym_server", "malware_server", "bot_server", "miner_server", "server_suspected_ratio",
-	// "server_response", "data_extrusion", "server_weaponized_total"|
-	// | ATA | "appid", "cos", "iks", "iam", "kms", "cert", "account", "app"|
-	// | CERT | "expired_cert", "expiring_1day_cert", "expiring_10day_cert", "expiring_30day_cert", "expiring_60day_cert",
-	// "expiring_90day_cert"|
-	// | config-advisor | "appprotection-dns_not_proxied", "appprotection-dnssec_off", "appprotection-ssl_not_strict",
-	// "appprotection-tls_min_version", "appprotection-waf_off", "appprotection-waf_rules", "calico-deny_all_rule",
-	// "calico-nonstandard_ports", "calico-update_cis_whitelist", "datacos-cos_managers", "datacos-not_encrypted_via_kp",
-	// "datacos-not_in_private_network", "datacos-public_bucket_acl", "datacos-public_bucket_iam",
-	// "datacos-public_object_acl", "iam-account_admins", "iam-all_resource_managers", "iam-all_resource_readers",
-	// "iam-identity_admins", "iam-kms_managers", "iam-out_of_group"|
-	// | ALL | "ALL"|.
-	FindingTypes []string `json:"finding_types,omitempty"`
-}
-
-// GetChannelResponseChannelSeverity : Severity of the notification.
-type GetChannelResponseChannelSeverity struct {
-
-	// Critical Severity.
-	Critical *bool `json:"critical,omitempty"`
-
-	// High Severity.
-	High *bool `json:"high,omitempty"`
-
-	// Medium Severity.
-	Medium *bool `json:"medium,omitempty"`
-
-	// Low Severity.
-	Low *bool `json:"low,omitempty"`
-}
-
 // GetNotificationChannelOptions : The GetNotificationChannel options.
 type GetNotificationChannelOptions struct {
 
@@ -1269,7 +1183,7 @@ type DeleteChannelResponse struct {
 type GetChannelResponse struct {
 
 	// Response including channels.
-	Channel *GetChannelResponseChannel `json:"channel,omitempty"`
+	Channel *ChannelResponseDefinition `json:"channel,omitempty"`
 }
 
 // ListChannelsResponse : Response including channels.
