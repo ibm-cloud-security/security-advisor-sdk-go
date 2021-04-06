@@ -336,6 +336,8 @@ func TestGetNotificationChannelUsingStruct(t *testing.T) {
 		assert.Equal(t, *fetchResult.Channel.ChannelID, *result.ChannelID)
 		assert.Equal(t, *fetchResult.Channel.Name, *createChannelOptions.Name)
 		assert.Equal(t, *fetchResult.Channel.Type, *createChannelOptions.Type)
+		assert.Equal(t, *fetchResult.Channel.AlertSource[0].ProviderName, "ALL")
+		assert.Equal(t, *fetchResult.Channel.Severity.High, true)
 
 		fmt.Println("Deleting channel....")
 		deleteChannelHelper(t, *createChannelOptions.AccountID, *result.ChannelID)
@@ -368,6 +370,8 @@ func TestGetNotificationChannelUsingFunctions(t *testing.T) {
 		assert.Equal(t, *fetchResult.Channel.ChannelID, *result.ChannelID)
 		assert.Equal(t, *fetchResult.Channel.Name, *createChannelOptions.Name)
 		assert.Equal(t, *fetchResult.Channel.Type, *createChannelOptions.Type)
+		assert.Equal(t, *fetchResult.Channel.AlertSource[0].ProviderName, "ALL")
+		assert.Equal(t, *fetchResult.Channel.Severity.High, true)
 
 		fmt.Println("Deleting channel....")
 		deleteChannelHelper(t, *createChannelOptions.AccountID, *result.ChannelID)
