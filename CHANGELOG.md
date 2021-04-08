@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/ibm-cloud-security/security-advisor-sdk-go/compare/v2.0.0...v2.0.1) (2021-04-08)
+
+
+### Bug Fixes
+
+* **version:** Fix version in mod, update imports ([321808c](https://github.com/ibm-cloud-security/security-advisor-sdk-go/commit/321808cabbea64589c8103eb2ba9dfe1f9264fae))
+
 # [2.0.0](https://github.com/ibm-cloud-security/security-advisor-sdk-go/compare/v1.1.1...v2.0.0) (2021-04-06)
 
 
