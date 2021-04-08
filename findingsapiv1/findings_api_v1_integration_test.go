@@ -14,7 +14,7 @@ import (
 
 	"github.com/IBM/go-sdk-core/v3/core"
 	"github.com/go-openapi/strfmt"
-	"github.com/ibm-cloud-security/security-advisor-sdk-go/v2/findingsapiv1"
+	"github.com/ibm-cloud-security/security-advisor-sdk-go/findingsapiv1"
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 )
@@ -155,7 +155,6 @@ func TestServiceSetup(t *testing.T) {
 	}
 	service, err = findingsapiv1.NewFindingsApiV1(&findingsapiv1.FindingsApiV1Options{
 		Authenticator: authenticator,
-		URL:           findingsServiceURL,
 	})
 	if service == nil {
 		t.Fatal("Expected service to not be nil, but got: ", err)

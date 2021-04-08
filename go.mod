@@ -1,5 +1,4 @@
-module github.com/ibm-cloud-security/security-advisor-sdk-go/v2
-
+module github.com/ibm-cloud-security/security-advisor-sdk-go
 go 1.14
 
 require (

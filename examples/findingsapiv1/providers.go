@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/IBM/go-sdk-core/v3/core"
-	"github.com/ibm-cloud-security/security-advisor-sdk-go/v2/findingsapiv1"
+	"github.com/ibm-cloud-security/security-advisor-sdk-go/findingsapiv1"
 )
 
 //ListProviders Lists all providers under a account

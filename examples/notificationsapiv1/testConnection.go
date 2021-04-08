@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/IBM/go-sdk-core/v3/core"
-	"github.com/ibm-cloud-security/security-advisor-sdk-go/v2/notificationsapiv1"
+	"github.com/ibm-cloud-security/security-advisor-sdk-go/notificationsapiv1"
 )
 
 //TestConnection tests the connection to the endpoint of a channel

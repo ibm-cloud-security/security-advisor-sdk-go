@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/IBM/go-sdk-core/v3/core"
-	"github.com/ibm-cloud-security/security-advisor-sdk-go/v2/notificationsapiv1"
+	"github.com/ibm-cloud-security/security-advisor-sdk-go/notificationsapiv1"
 )
 
 //ListChannels lists all channel in an account

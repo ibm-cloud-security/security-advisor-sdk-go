@@ -23,7 +23,7 @@ import (
 
 	"github.com/IBM/go-sdk-core/v3/core"
 	"github.com/go-openapi/strfmt"
-	common "github.com/ibm-cloud-security/security-advisor-sdk-go/v2/common"
+	common "github.com/ibm-cloud-security/security-advisor-sdk-go/common"
 )
 
 // FindingsApiV1 : The Findings API
