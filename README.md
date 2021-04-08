@@ -31,6 +31,7 @@ This repository contains the released GO client SDK for IBM Cloud Security Advis
     - [Run unit tests:](#run-unit-tests)
     - [Run integration tests:](#run-integration-tests)
   - [License](#license)
+  - [Open Issues](#open-issues)
 </details>
 
 ## Overview
@@ -70,8 +71,8 @@ Go application, like this:
 
 ```go
 import (
-  "github.com/ibm-cloud-security/security-advisor-sdk-go/findingsapiv1"
-  "github.com/ibm-cloud-security/security-advisor-sdk-go/notificationsapiv1"
+  "github.com/ibm-cloud-security/security-advisor-sdk-go/v2/findingsapiv1"
+  "github.com/ibm-cloud-security/security-advisor-sdk-go/v2/notificationsapiv1"
 )
 ```
 
