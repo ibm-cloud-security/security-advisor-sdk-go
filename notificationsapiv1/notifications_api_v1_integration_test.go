@@ -16,7 +16,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/ibm-cloud-security/security-advisor-sdk-go/notificationsapiv1"
+	"github.com/ibm-cloud-security/security-advisor-sdk-go/v2/notificationsapiv1"
 )
 
 var apiKey = os.Getenv("apiKey")
