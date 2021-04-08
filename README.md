@@ -51,7 +51,7 @@ Service Name | Package name
 * Go version 1.12 or above.
 
 ## Installation
-The current version of this SDK: v2.0.0
+The current version of this SDK: v2.0.1
 
 There are a few different ways to download and install the Findings API Go SDK project for use by your
 Go application:
@@ -85,7 +85,7 @@ to your `Gopkg.toml` file.  Here is an example:
 ```
 [[constraint]]
   name = "github.com/ibm-cloud-security/security-advisor-sdk-go"
-  version = "v2.0.0"
+  version = "v2.0.1"
 
 ```
 
