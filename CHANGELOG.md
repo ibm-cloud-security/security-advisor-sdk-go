@@ -1,3 +1,13 @@
+# [3.0.0](https://github.com/ibm-cloud-security/security-advisor-sdk-go/compare/v2.0.1...v3.0.0) (2021-04-20)
+
+
+* Merge pull request #29 from ibm-cloud-security/fix_readme ([6abca99](https://github.com/ibm-cloud-security/security-advisor-sdk-go/commit/6abca9992e2d3362cb60fe8145ea7be125993d7d)), closes [#29](https://github.com/ibm-cloud-security/security-advisor-sdk-go/issues/29)
+
+
+### BREAKING CHANGES
+
+* Update response definitions
+
 ## [2.0.1](https://github.com/ibm-cloud-security/security-advisor-sdk-go/compare/v2.0.0...v2.0.1) (2021-04-08)
 
 
