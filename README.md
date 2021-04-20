@@ -31,6 +31,7 @@ This repository contains the released GO client SDK for IBM Cloud Security Advis
     - [Run unit tests:](#run-unit-tests)
     - [Run integration tests:](#run-integration-tests)
   - [License](#license)
+  - [Open Issues](#open-issues)
 </details>
 
 ## Overview
@@ -70,8 +71,8 @@ Go application, like this:
 
 ```go
 import (
-  "github.com/ibm-cloud-security/security-advisor-sdk-go/findingsapiv1"
-  "github.com/ibm-cloud-security/security-advisor-sdk-go/notificationsapiv1"
+  "github.com/ibm-cloud-security/security-advisor-sdk-go/v3/findingsapiv1"
+  "github.com/ibm-cloud-security/security-advisor-sdk-go/v3/notificationsapiv1"
 )
 ```
 
@@ -110,8 +111,8 @@ To provide credentials to the SDK, you supply either an IAM service **API key** 
 ```go
 import (
   "github.com/IBM/go-sdk-core/v3/core"
-  "github.com/ibm-cloud-security/security-advisor-sdk-go/findingsapiv1"
-  "github.com/ibm-cloud-security/security-advisor-sdk-go/notificationsapiv1"
+  "github.com/ibm-cloud-security/security-advisor-sdk-go/v3/findingsapiv1"
+  "github.com/ibm-cloud-security/security-advisor-sdk-go/v3/notificationsapiv1"
 )
 
 authenticator := &core.IamAuthenticator{
@@ -140,7 +141,7 @@ For example, to send a header called `Custom-Header` to a call in  `notification
 ```go
 import (
   "github.com/IBM/go-sdk-core/v3/core"
-  "github.com/ibm-cloud-security/security-advisor-sdk-go/notificationsapiv1"
+  "github.com/ibm-cloud-security/security-advisor-sdk-go/v3/notificationsapiv1"
 )
 
 authenticator := &core.IamAuthenticator{
@@ -168,7 +169,7 @@ import (
  "fmt"
 
  "github.com/IBM/go-sdk-core/v3/core"
- "github.com/ibm-cloud-security/security-advisor-sdk-go/findingsapiv1"
+ "github.com/ibm-cloud-security/security-advisor-sdk-go/v3/findingsapiv1"
 )
 
 providerID := "providerID" //Invalid provider id
@@ -212,7 +213,7 @@ import (
  "fmt"
 
  "github.com/IBM/go-sdk-core/v3/core"
- "github.com/ibm-cloud-security/security-advisor-sdk-go/notificationsapiv1"
+ "github.com/ibm-cloud-security/security-advisor-sdk-go/v3/notificationsapiv1"
 )
 
 channelID := "channel" //invalid channel id
