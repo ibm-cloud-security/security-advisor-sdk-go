@@ -3,8 +3,8 @@ package examples
 import (
 	"fmt"
 
-	"github.com/IBM/go-sdk-core/v3/core"
-	"github.com/ibm-cloud-security/security-advisor-sdk-go/v2/notificationsapiv1"
+	"github.com/IBM/go-sdk-core/v5/core"
+	"github.com/ibm-cloud-security/security-advisor-sdk-go/v3/notificationsapiv1"
 )
 
 //GetChannel gets a channel
@@ -20,7 +20,7 @@ func GetChannel() {
 		URL:           "https://us-south.secadvisor.cloud.ibm.com/notifications", //Specify url or use default
 	})
 
-	channelID := "3b95c100-8ebb-11ea-a009-0fa4c7a4acaf"
+	channelID := "6bb5f7b0-a1a7-11eb-a800-4b593bbe7d0c"
 
 	getChannelOptions := service.NewGetNotificationChannelOptions(accountID, channelID)
 	result, resp, operationErr := service.GetNotificationChannel(getChannelOptions)

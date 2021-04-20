@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/IBM/go-sdk-core/v3/core"
-	"github.com/ibm-cloud-security/security-advisor-sdk-go/v2/findingsapiv1"
+	"github.com/ibm-cloud-security/security-advisor-sdk-go/v3/findingsapiv1"
 )
 
 //PostGraph posts a grapgql query
