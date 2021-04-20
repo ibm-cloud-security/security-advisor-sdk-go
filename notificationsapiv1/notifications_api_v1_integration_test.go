@@ -458,8 +458,8 @@ func TestTestNotificationChannelInvalid(t *testing.T) {
 		_, resp, operationErr := service.TestNotificationChannel(testChannelOptions)
 
 		assert.NotNil(t, operationErr)
-		assert.Equal(t, resp.StatusCode, 500)
-		assert.Equal(t, operationErr.Error(), "Server error")
+		assert.Equal(t, resp.StatusCode, 503)
+		assert.Equal(t, operationErr.Error(), "The webhook URL specified for the channel is unavailable")
 
 		fmt.Println("Deleting channel....")
 		deleteChannelHelper(t, *createChannelOptions.AccountID, *result.ChannelID)

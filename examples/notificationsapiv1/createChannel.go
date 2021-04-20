@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/IBM/go-sdk-core/v3/core"
-	"github.com/ibm-cloud-security/security-advisor-sdk-go/v2/notificationsapiv1"
+	"github.com/IBM/go-sdk-core/v5/core"
+	"github.com/ibm-cloud-security/security-advisor-sdk-go/v3/notificationsapiv1"
 )
 
 //CreateChannel creates a new channel
@@ -22,7 +22,7 @@ func CreateChannel() {
 		URL:           "https://us-south.secadvisor.cloud.ibm.com/notifications", //Specify url or use default
 	})
 
-	channelName := "sdktest_channel_exmpl"
+	channelName := "sdktest_channel_exmpl1"
 	endpoint := "https://ss.ss"
 	channelType := "Webhook"
 	severity := []string{notificationsapiv1.CreateNotificationChannelOptions_Severity_Low, notificationsapiv1.CreateNotificationChannelOptions_Severity_High, notificationsapiv1.CreateNotificationChannelOptions_Severity_Critical}

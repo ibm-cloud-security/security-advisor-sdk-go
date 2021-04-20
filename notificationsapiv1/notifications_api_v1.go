@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
+/*
+ * IBM OpenAPI SDK Code Generator Version: 3.30.0-bd714324-20210406-200538
+ */
+
 // Package notificationsapiv1 : Operations and models for the NotificationsApiV1 service
 package notificationsapiv1
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
+	"net/http"
+	"reflect"
+	"time"
 
-	"github.com/IBM/go-sdk-core/v3/core"
-	common "github.com/ibm-cloud-security/security-advisor-sdk-go/v2/common"
+	"github.com/IBM/go-sdk-core/v5/core"
+	common "github.com/ibm-cloud-security/security-advisor-sdk-go/v3/common"
 )
 
 // NotificationsApiV1 : notifications-api
@@ -99,14 +108,65 @@ func NewNotificationsApiV1(options *NotificationsApiV1Options) (service *Notific
 	return
 }
 
+// GetServiceURLForRegion returns the service URL to be used for the specified region
+func GetServiceURLForRegion(region string) (string, error) {
+	return "", fmt.Errorf("service does not support regional URLs")
+}
+
+// Clone makes a copy of "notificationsApi" suitable for processing requests.
+func (notificationsApi *NotificationsApiV1) Clone() *NotificationsApiV1 {
+	if core.IsNil(notificationsApi) {
+		return nil
+	}
+	clone := *notificationsApi
+	clone.Service = notificationsApi.Service.Clone()
+	return &clone
+}
+
 // SetServiceURL sets the service URL
 func (notificationsApi *NotificationsApiV1) SetServiceURL(url string) error {
 	return notificationsApi.Service.SetServiceURL(url)
 }
 
+// GetServiceURL returns the service URL
+func (notificationsApi *NotificationsApiV1) GetServiceURL() string {
+	return notificationsApi.Service.GetServiceURL()
+}
+
+// SetDefaultHeaders sets HTTP headers to be sent in every request
+func (notificationsApi *NotificationsApiV1) SetDefaultHeaders(headers http.Header) {
+	notificationsApi.Service.SetDefaultHeaders(headers)
+}
+
+// SetEnableGzipCompression sets the service's EnableGzipCompression field
+func (notificationsApi *NotificationsApiV1) SetEnableGzipCompression(enableGzip bool) {
+	notificationsApi.Service.SetEnableGzipCompression(enableGzip)
+}
+
+// GetEnableGzipCompression returns the service's EnableGzipCompression field
+func (notificationsApi *NotificationsApiV1) GetEnableGzipCompression() bool {
+	return notificationsApi.Service.GetEnableGzipCompression()
+}
+
+// EnableRetries enables automatic retries for requests invoked for this service instance.
+// If either parameter is specified as 0, then a default value is used instead.
+func (notificationsApi *NotificationsApiV1) EnableRetries(maxRetries int, maxRetryInterval time.Duration) {
+	notificationsApi.Service.EnableRetries(maxRetries, maxRetryInterval)
+}
+
+// DisableRetries disables automatic retries for requests invoked for this service instance.
+func (notificationsApi *NotificationsApiV1) DisableRetries() {
+	notificationsApi.Service.DisableRetries()
+}
+
 // ListAllChannels : list all channels
 // list all channels under this account.
-func (notificationsApi *NotificationsApiV1) ListAllChannels(listAllChannelsOptions *ListAllChannelsOptions) (result *ListChannelsResponse, response *core.DetailedResponse, err error) {
+func (notificationsApi *NotificationsApiV1) ListAllChannels(listAllChannelsOptions *ListAllChannelsOptions) (result *ChannelsList, response *core.DetailedResponse, err error) {
+	return notificationsApi.ListAllChannelsWithContext(context.Background(), listAllChannelsOptions)
+}
+
+// ListAllChannelsWithContext is an alternate form of the ListAllChannels method which supports a Context parameter
+func (notificationsApi *NotificationsApiV1) ListAllChannelsWithContext(ctx context.Context, listAllChannelsOptions *ListAllChannelsOptions) (result *ChannelsList, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(listAllChannelsOptions, "listAllChannelsOptions cannot be nil")
 	if err != nil {
 		return
@@ -116,11 +176,14 @@ func (notificationsApi *NotificationsApiV1) ListAllChannels(listAllChannelsOptio
 		return
 	}
 
-	pathSegments := []string{"v1", "notifications/channels"}
-	pathParameters := []string{*listAllChannelsOptions.AccountID}
+	pathParamsMap := map[string]string{
+		"account_id": *listAllChannelsOptions.AccountID,
+	}
 
 	builder := core.NewRequestBuilder(core.GET)
-	_, err = builder.ConstructHTTPURL(notificationsApi.Service.Options.URL, pathSegments, pathParameters)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = notificationsApi.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(notificationsApi.Service.Options.URL, `/v1/{account_id}/notifications/channels`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -133,8 +196,10 @@ func (notificationsApi *NotificationsApiV1) ListAllChannels(listAllChannelsOptio
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
-
 	builder.AddHeader("Accept", "application/json")
+	if listAllChannelsOptions.TransactionID != nil {
+		builder.AddHeader("Transaction-Id", fmt.Sprint(*listAllChannelsOptions.TransactionID))
+	}
 
 	if listAllChannelsOptions.Limit != nil {
 		builder.AddQuery("limit", fmt.Sprint(*listAllChannelsOptions.Limit))
@@ -148,21 +213,28 @@ func (notificationsApi *NotificationsApiV1) ListAllChannels(listAllChannelsOptio
 		return
 	}
 
-	response, err = notificationsApi.Service.Request(request, new(ListChannelsResponse))
-	if err == nil {
-		var ok bool
-		result, ok = response.Result.(*ListChannelsResponse)
-		if !ok {
-			err = fmt.Errorf("An error occurred while processing the operation response")
-		}
+	var rawResponse map[string]json.RawMessage
+	response, err = notificationsApi.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
 	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalChannelsList)
+	if err != nil {
+		return
+	}
+	response.Result = result
 
 	return
 }
 
 // CreateNotificationChannel : create notification channel
 // create notification channel.
-func (notificationsApi *NotificationsApiV1) CreateNotificationChannel(createNotificationChannelOptions *CreateNotificationChannelOptions) (result *CreateChannelsResponse, response *core.DetailedResponse, err error) {
+func (notificationsApi *NotificationsApiV1) CreateNotificationChannel(createNotificationChannelOptions *CreateNotificationChannelOptions) (result *ChannelInfo, response *core.DetailedResponse, err error) {
+	return notificationsApi.CreateNotificationChannelWithContext(context.Background(), createNotificationChannelOptions)
+}
+
+// CreateNotificationChannelWithContext is an alternate form of the CreateNotificationChannel method which supports a Context parameter
+func (notificationsApi *NotificationsApiV1) CreateNotificationChannelWithContext(ctx context.Context, createNotificationChannelOptions *CreateNotificationChannelOptions) (result *ChannelInfo, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(createNotificationChannelOptions, "createNotificationChannelOptions cannot be nil")
 	if err != nil {
 		return
@@ -172,11 +244,14 @@ func (notificationsApi *NotificationsApiV1) CreateNotificationChannel(createNoti
 		return
 	}
 
-	pathSegments := []string{"v1", "notifications/channels"}
-	pathParameters := []string{*createNotificationChannelOptions.AccountID}
+	pathParamsMap := map[string]string{
+		"account_id": *createNotificationChannelOptions.AccountID,
+	}
 
 	builder := core.NewRequestBuilder(core.POST)
-	_, err = builder.ConstructHTTPURL(notificationsApi.Service.Options.URL, pathSegments, pathParameters)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = notificationsApi.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(notificationsApi.Service.Options.URL, `/v1/{account_id}/notifications/channels`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -189,9 +264,11 @@ func (notificationsApi *NotificationsApiV1) CreateNotificationChannel(createNoti
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
-
 	builder.AddHeader("Accept", "application/json")
 	builder.AddHeader("Content-Type", "application/json")
+	if createNotificationChannelOptions.TransactionID != nil {
+		builder.AddHeader("Transaction-Id", fmt.Sprint(*createNotificationChannelOptions.TransactionID))
+	}
 
 	body := make(map[string]interface{})
 	if createNotificationChannelOptions.Name != nil {
@@ -225,21 +302,28 @@ func (notificationsApi *NotificationsApiV1) CreateNotificationChannel(createNoti
 		return
 	}
 
-	response, err = notificationsApi.Service.Request(request, new(CreateChannelsResponse))
-	if err == nil {
-		var ok bool
-		result, ok = response.Result.(*CreateChannelsResponse)
-		if !ok {
-			err = fmt.Errorf("An error occurred while processing the operation response.")
-		}
+	var rawResponse map[string]json.RawMessage
+	response, err = notificationsApi.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
 	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalChannelInfo)
+	if err != nil {
+		return
+	}
+	response.Result = result
 
 	return
 }
 
 // DeleteNotificationChannels : bulk delete of channels
 // bulk delete of channels.
-func (notificationsApi *NotificationsApiV1) DeleteNotificationChannels(deleteNotificationChannelsOptions *DeleteNotificationChannelsOptions) (result *BulkDeleteChannelsResponse, response *core.DetailedResponse, err error) {
+func (notificationsApi *NotificationsApiV1) DeleteNotificationChannels(deleteNotificationChannelsOptions *DeleteNotificationChannelsOptions) (result *ChannelsDelete, response *core.DetailedResponse, err error) {
+	return notificationsApi.DeleteNotificationChannelsWithContext(context.Background(), deleteNotificationChannelsOptions)
+}
+
+// DeleteNotificationChannelsWithContext is an alternate form of the DeleteNotificationChannels method which supports a Context parameter
+func (notificationsApi *NotificationsApiV1) DeleteNotificationChannelsWithContext(ctx context.Context, deleteNotificationChannelsOptions *DeleteNotificationChannelsOptions) (result *ChannelsDelete, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(deleteNotificationChannelsOptions, "deleteNotificationChannelsOptions cannot be nil")
 	if err != nil {
 		return
@@ -249,11 +333,14 @@ func (notificationsApi *NotificationsApiV1) DeleteNotificationChannels(deleteNot
 		return
 	}
 
-	pathSegments := []string{"v1", "notifications/channels"}
-	pathParameters := []string{*deleteNotificationChannelsOptions.AccountID}
+	pathParamsMap := map[string]string{
+		"account_id": *deleteNotificationChannelsOptions.AccountID,
+	}
 
 	builder := core.NewRequestBuilder(core.DELETE)
-	_, err = builder.ConstructHTTPURL(notificationsApi.Service.Options.URL, pathSegments, pathParameters)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = notificationsApi.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(notificationsApi.Service.Options.URL, `/v1/{account_id}/notifications/channels`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -266,9 +353,11 @@ func (notificationsApi *NotificationsApiV1) DeleteNotificationChannels(deleteNot
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
-
 	builder.AddHeader("Accept", "application/json")
 	builder.AddHeader("Content-Type", "application/json")
+	if deleteNotificationChannelsOptions.TransactionID != nil {
+		builder.AddHeader("Transaction-Id", fmt.Sprint(*deleteNotificationChannelsOptions.TransactionID))
+	}
 
 	_, err = builder.SetBodyContentJSON(deleteNotificationChannelsOptions.Body)
 	if err != nil {
@@ -280,21 +369,28 @@ func (notificationsApi *NotificationsApiV1) DeleteNotificationChannels(deleteNot
 		return
 	}
 
-	response, err = notificationsApi.Service.Request(request, new(BulkDeleteChannelsResponse))
-	if err == nil {
-		var ok bool
-		result, ok = response.Result.(*BulkDeleteChannelsResponse)
-		if !ok {
-			err = fmt.Errorf("An error occurred while processing the operation response.")
-		}
+	var rawResponse map[string]json.RawMessage
+	response, err = notificationsApi.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
 	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalChannelsDelete)
+	if err != nil {
+		return
+	}
+	response.Result = result
 
 	return
 }
 
 // DeleteNotificationChannel : delete the details of a specific channel
 // delete the details of a specific channel.
-func (notificationsApi *NotificationsApiV1) DeleteNotificationChannel(deleteNotificationChannelOptions *DeleteNotificationChannelOptions) (result *DeleteChannelResponse, response *core.DetailedResponse, err error) {
+func (notificationsApi *NotificationsApiV1) DeleteNotificationChannel(deleteNotificationChannelOptions *DeleteNotificationChannelOptions) (result *ChannelDelete, response *core.DetailedResponse, err error) {
+	return notificationsApi.DeleteNotificationChannelWithContext(context.Background(), deleteNotificationChannelOptions)
+}
+
+// DeleteNotificationChannelWithContext is an alternate form of the DeleteNotificationChannel method which supports a Context parameter
+func (notificationsApi *NotificationsApiV1) DeleteNotificationChannelWithContext(ctx context.Context, deleteNotificationChannelOptions *DeleteNotificationChannelOptions) (result *ChannelDelete, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(deleteNotificationChannelOptions, "deleteNotificationChannelOptions cannot be nil")
 	if err != nil {
 		return
@@ -304,11 +400,15 @@ func (notificationsApi *NotificationsApiV1) DeleteNotificationChannel(deleteNoti
 		return
 	}
 
-	pathSegments := []string{"v1", "notifications/channels"}
-	pathParameters := []string{*deleteNotificationChannelOptions.AccountID, *deleteNotificationChannelOptions.ChannelID}
+	pathParamsMap := map[string]string{
+		"account_id": *deleteNotificationChannelOptions.AccountID,
+		"channel_id": *deleteNotificationChannelOptions.ChannelID,
+	}
 
 	builder := core.NewRequestBuilder(core.DELETE)
-	_, err = builder.ConstructHTTPURL(notificationsApi.Service.Options.URL, pathSegments, pathParameters)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = notificationsApi.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(notificationsApi.Service.Options.URL, `/v1/{account_id}/notifications/channels/{channel_id}`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -321,29 +421,38 @@ func (notificationsApi *NotificationsApiV1) DeleteNotificationChannel(deleteNoti
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
-
 	builder.AddHeader("Accept", "application/json")
+	if deleteNotificationChannelOptions.TransactionID != nil {
+		builder.AddHeader("Transaction-Id", fmt.Sprint(*deleteNotificationChannelOptions.TransactionID))
+	}
 
 	request, err := builder.Build()
 	if err != nil {
 		return
 	}
 
-	response, err = notificationsApi.Service.Request(request, new(DeleteChannelResponse))
-	if err == nil {
-		var ok bool
-		result, ok = response.Result.(*DeleteChannelResponse)
-		if !ok {
-			err = fmt.Errorf("An error occurred while processing the operation response.")
-		}
+	var rawResponse map[string]json.RawMessage
+	response, err = notificationsApi.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
 	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalChannelDelete)
+	if err != nil {
+		return
+	}
+	response.Result = result
 
 	return
 }
 
 // GetNotificationChannel : get the details of a specific channel
 // get the details of a specific channel.
-func (notificationsApi *NotificationsApiV1) GetNotificationChannel(getNotificationChannelOptions *GetNotificationChannelOptions) (result *GetChannelResponse, response *core.DetailedResponse, err error) {
+func (notificationsApi *NotificationsApiV1) GetNotificationChannel(getNotificationChannelOptions *GetNotificationChannelOptions) (result *ChannelGet, response *core.DetailedResponse, err error) {
+	return notificationsApi.GetNotificationChannelWithContext(context.Background(), getNotificationChannelOptions)
+}
+
+// GetNotificationChannelWithContext is an alternate form of the GetNotificationChannel method which supports a Context parameter
+func (notificationsApi *NotificationsApiV1) GetNotificationChannelWithContext(ctx context.Context, getNotificationChannelOptions *GetNotificationChannelOptions) (result *ChannelGet, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(getNotificationChannelOptions, "getNotificationChannelOptions cannot be nil")
 	if err != nil {
 		return
@@ -353,11 +462,15 @@ func (notificationsApi *NotificationsApiV1) GetNotificationChannel(getNotificati
 		return
 	}
 
-	pathSegments := []string{"v1", "notifications/channels"}
-	pathParameters := []string{*getNotificationChannelOptions.AccountID, *getNotificationChannelOptions.ChannelID}
+	pathParamsMap := map[string]string{
+		"account_id": *getNotificationChannelOptions.AccountID,
+		"channel_id": *getNotificationChannelOptions.ChannelID,
+	}
 
 	builder := core.NewRequestBuilder(core.GET)
-	_, err = builder.ConstructHTTPURL(notificationsApi.Service.Options.URL, pathSegments, pathParameters)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = notificationsApi.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(notificationsApi.Service.Options.URL, `/v1/{account_id}/notifications/channels/{channel_id}`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -370,29 +483,38 @@ func (notificationsApi *NotificationsApiV1) GetNotificationChannel(getNotificati
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
-
 	builder.AddHeader("Accept", "application/json")
+	if getNotificationChannelOptions.TransactionID != nil {
+		builder.AddHeader("Transaction-Id", fmt.Sprint(*getNotificationChannelOptions.TransactionID))
+	}
 
 	request, err := builder.Build()
 	if err != nil {
 		return
 	}
 
-	response, err = notificationsApi.Service.Request(request, new(GetChannelResponse))
-	if err == nil {
-		var ok bool
-		result, ok = response.Result.(*GetChannelResponse)
-		if !ok {
-			err = fmt.Errorf("An error occurred while processing the operation response.")
-		}
+	var rawResponse map[string]json.RawMessage
+	response, err = notificationsApi.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
 	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalChannelGet)
+	if err != nil {
+		return
+	}
+	response.Result = result
 
 	return
 }
 
 // UpdateNotificationChannel : update notification channel
 // update notification channel.
-func (notificationsApi *NotificationsApiV1) UpdateNotificationChannel(updateNotificationChannelOptions *UpdateNotificationChannelOptions) (result *UpdateChannelResponse, response *core.DetailedResponse, err error) {
+func (notificationsApi *NotificationsApiV1) UpdateNotificationChannel(updateNotificationChannelOptions *UpdateNotificationChannelOptions) (result *ChannelInfo, response *core.DetailedResponse, err error) {
+	return notificationsApi.UpdateNotificationChannelWithContext(context.Background(), updateNotificationChannelOptions)
+}
+
+// UpdateNotificationChannelWithContext is an alternate form of the UpdateNotificationChannel method which supports a Context parameter
+func (notificationsApi *NotificationsApiV1) UpdateNotificationChannelWithContext(ctx context.Context, updateNotificationChannelOptions *UpdateNotificationChannelOptions) (result *ChannelInfo, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(updateNotificationChannelOptions, "updateNotificationChannelOptions cannot be nil")
 	if err != nil {
 		return
@@ -402,11 +524,15 @@ func (notificationsApi *NotificationsApiV1) UpdateNotificationChannel(updateNoti
 		return
 	}
 
-	pathSegments := []string{"v1", "notifications/channels"}
-	pathParameters := []string{*updateNotificationChannelOptions.AccountID, *updateNotificationChannelOptions.ChannelID}
+	pathParamsMap := map[string]string{
+		"account_id": *updateNotificationChannelOptions.AccountID,
+		"channel_id": *updateNotificationChannelOptions.ChannelID,
+	}
 
 	builder := core.NewRequestBuilder(core.PUT)
-	_, err = builder.ConstructHTTPURL(notificationsApi.Service.Options.URL, pathSegments, pathParameters)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = notificationsApi.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(notificationsApi.Service.Options.URL, `/v1/{account_id}/notifications/channels/{channel_id}`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -419,9 +545,11 @@ func (notificationsApi *NotificationsApiV1) UpdateNotificationChannel(updateNoti
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
-
 	builder.AddHeader("Accept", "application/json")
 	builder.AddHeader("Content-Type", "application/json")
+	if updateNotificationChannelOptions.TransactionID != nil {
+		builder.AddHeader("Transaction-Id", fmt.Sprint(*updateNotificationChannelOptions.TransactionID))
+	}
 
 	body := make(map[string]interface{})
 	if updateNotificationChannelOptions.Name != nil {
@@ -455,21 +583,28 @@ func (notificationsApi *NotificationsApiV1) UpdateNotificationChannel(updateNoti
 		return
 	}
 
-	response, err = notificationsApi.Service.Request(request, new(UpdateChannelResponse))
-	if err == nil {
-		var ok bool
-		result, ok = response.Result.(*UpdateChannelResponse)
-		if !ok {
-			err = fmt.Errorf("An error occurred while processing the operation response.")
-		}
+	var rawResponse map[string]json.RawMessage
+	response, err = notificationsApi.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
 	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalChannelInfo)
+	if err != nil {
+		return
+	}
+	response.Result = result
 
 	return
 }
 
 // TestNotificationChannel : test notification channel
 // test a nofication channel under this account.
-func (notificationsApi *NotificationsApiV1) TestNotificationChannel(testNotificationChannelOptions *TestNotificationChannelOptions) (result *TestChannelResponse, response *core.DetailedResponse, err error) {
+func (notificationsApi *NotificationsApiV1) TestNotificationChannel(testNotificationChannelOptions *TestNotificationChannelOptions) (result *TestChannel, response *core.DetailedResponse, err error) {
+	return notificationsApi.TestNotificationChannelWithContext(context.Background(), testNotificationChannelOptions)
+}
+
+// TestNotificationChannelWithContext is an alternate form of the TestNotificationChannel method which supports a Context parameter
+func (notificationsApi *NotificationsApiV1) TestNotificationChannelWithContext(ctx context.Context, testNotificationChannelOptions *TestNotificationChannelOptions) (result *TestChannel, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(testNotificationChannelOptions, "testNotificationChannelOptions cannot be nil")
 	if err != nil {
 		return
@@ -479,11 +614,15 @@ func (notificationsApi *NotificationsApiV1) TestNotificationChannel(testNotifica
 		return
 	}
 
-	pathSegments := []string{"v1", "notifications/channels", "test"}
-	pathParameters := []string{*testNotificationChannelOptions.AccountID, *testNotificationChannelOptions.ChannelID}
+	pathParamsMap := map[string]string{
+		"account_id": *testNotificationChannelOptions.AccountID,
+		"channel_id": *testNotificationChannelOptions.ChannelID,
+	}
 
 	builder := core.NewRequestBuilder(core.GET)
-	_, err = builder.ConstructHTTPURL(notificationsApi.Service.Options.URL, pathSegments, pathParameters)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = notificationsApi.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(notificationsApi.Service.Options.URL, `/v1/{account_id}/notifications/channels/{channel_id}/test`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -496,29 +635,38 @@ func (notificationsApi *NotificationsApiV1) TestNotificationChannel(testNotifica
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
-
 	builder.AddHeader("Accept", "application/json")
+	if testNotificationChannelOptions.TransactionID != nil {
+		builder.AddHeader("Transaction-Id", fmt.Sprint(*testNotificationChannelOptions.TransactionID))
+	}
 
 	request, err := builder.Build()
 	if err != nil {
 		return
 	}
 
-	response, err = notificationsApi.Service.Request(request, new(TestChannelResponse))
-	if err == nil {
-		var ok bool
-		result, ok = response.Result.(*TestChannelResponse)
-		if !ok {
-			err = fmt.Errorf("An error occurred while processing the operation response.")
-		}
+	var rawResponse map[string]json.RawMessage
+	response, err = notificationsApi.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
 	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalTestChannel)
+	if err != nil {
+		return
+	}
+	response.Result = result
 
 	return
 }
 
 // GetPublicKey : fetch notifications public key
 // fetch public key to decrypt messages in notification payload.
-func (notificationsApi *NotificationsApiV1) GetPublicKey(getPublicKeyOptions *GetPublicKeyOptions) (result *PublicKeyResponse, response *core.DetailedResponse, err error) {
+func (notificationsApi *NotificationsApiV1) GetPublicKey(getPublicKeyOptions *GetPublicKeyOptions) (result *PublicKeyGet, response *core.DetailedResponse, err error) {
+	return notificationsApi.GetPublicKeyWithContext(context.Background(), getPublicKeyOptions)
+}
+
+// GetPublicKeyWithContext is an alternate form of the GetPublicKey method which supports a Context parameter
+func (notificationsApi *NotificationsApiV1) GetPublicKeyWithContext(ctx context.Context, getPublicKeyOptions *GetPublicKeyOptions) (result *PublicKeyGet, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(getPublicKeyOptions, "getPublicKeyOptions cannot be nil")
 	if err != nil {
 		return
@@ -528,11 +676,14 @@ func (notificationsApi *NotificationsApiV1) GetPublicKey(getPublicKeyOptions *Ge
 		return
 	}
 
-	pathSegments := []string{"v1", "notifications/public_key"}
-	pathParameters := []string{*getPublicKeyOptions.AccountID}
+	pathParamsMap := map[string]string{
+		"account_id": *getPublicKeyOptions.AccountID,
+	}
 
 	builder := core.NewRequestBuilder(core.GET)
-	_, err = builder.ConstructHTTPURL(notificationsApi.Service.Options.URL, pathSegments, pathParameters)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = notificationsApi.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(notificationsApi.Service.Options.URL, `/v1/{account_id}/notifications/public_key`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -545,104 +696,386 @@ func (notificationsApi *NotificationsApiV1) GetPublicKey(getPublicKeyOptions *Ge
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
-
 	builder.AddHeader("Accept", "application/json")
+	if getPublicKeyOptions.TransactionID != nil {
+		builder.AddHeader("Transaction-Id", fmt.Sprint(*getPublicKeyOptions.TransactionID))
+	}
 
 	request, err := builder.Build()
 	if err != nil {
 		return
 	}
 
-	response, err = notificationsApi.Service.Request(request, new(PublicKeyResponse))
-	if err == nil {
-		var ok bool
-		result, ok = response.Result.(*PublicKeyResponse)
-		if !ok {
-			err = fmt.Errorf("An error occurred while processing the operation response.")
-		}
+	var rawResponse map[string]json.RawMessage
+	response, err = notificationsApi.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
 	}
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalPublicKeyGet)
+	if err != nil {
+		return
+	}
+	response.Result = result
 
 	return
 }
 
-// ChannelResponseDefinitionAlertSourceItem : The alert sources. They identify the providers and their finding types which makes the findings available to Security
-// Advisor.
-type ChannelResponseDefinitionAlertSourceItem struct {
-
-	// Below is a list of builtin providers that you can select in addition to the ones you obtain by calling Findings API
-	// /v1/{account_id}/providers :
-	//  | provider_name | The source they represent |
-	//  |-----|-----|
-	//  | VA  | Vulnerable image findings|
-	//  | NA  | Network Insights findings|
-	//  | ATA | Activity Insights findings|
-	//  | CERT | Certificate Manager findings|
-	//  | ALL | Special provider name to represent all the providers. Its mutually exclusive with other providers meaning
-	// either you choose ALL or you don't|.
+// ChannelAlertSourceItem : The providers that act as alert sources and the potential findings that can be flagged as alerts.
+type ChannelAlertSourceItem struct {
+	// The providers that you can receive alerts for. To view your available providers, you can call the
+	// /v1/{account_id}/providers endpoint of the Findings API.
 	ProviderName *string `json:"provider_name,omitempty"`
 
-	// An array of the finding types of the provider_name or "ALL" to specify all finding types under that provider Below
-	// is a list of supported finding types for each built in providers
-	// | provider_name | Supported finding types |
-	// |-----|-----|
-	// | VA  | "image_with_vulnerabilities", "image_with_config_issues"|
-	// | NA  | "anonym_server", "malware_server", "bot_server", "miner_server", "server_suspected_ratio",
-	// "server_response", "data_extrusion", "server_weaponized_total"|
-	// | ATA | "appid", "cos", "iks", "iam", "kms", "cert", "account", "app"|
-	// | CERT | "expired_cert", "expiring_1day_cert", "expiring_10day_cert", "expiring_30day_cert", "expiring_60day_cert",
-	// "expiring_90day_cert"|
-	// | config-advisor | "appprotection-dns_not_proxied", "appprotection-dnssec_off", "appprotection-ssl_not_strict",
-	// "appprotection-tls_min_version", "appprotection-waf_off", "appprotection-waf_rules", "calico-deny_all_rule",
-	// "calico-nonstandard_ports", "calico-update_cis_whitelist", "datacos-cos_managers", "datacos-not_encrypted_via_kp",
-	// "datacos-not_in_private_network", "datacos-public_bucket_acl", "datacos-public_bucket_iam",
-	// "datacos-public_object_acl", "iam-account_admins", "iam-all_resource_managers", "iam-all_resource_readers",
-	// "iam-identity_admins", "iam-kms_managers", "iam-out_of_group"|
-	// | ALL | "ALL"|.
-	FindingTypes []string `json:"finding_types,omitempty"`
+	// The types of findings for each provider that you want to receive alerts for. Options are dependent upon the provider
+	// that you select. Depending on that selection, some available options include `image_with_vulnerabilities`,
+	// `anonym_server`, `server_suspected_ratio`, `appid`, `cos`, `expired_cert`, and `expiring_1day_cert`For a full list
+	// of available finding types, see [the docs](/docs/).
+	FindingTypes []interface{} `json:"finding_types,omitempty"`
 }
 
-// ChannelResponseDefinitionSeverity : Severity of the notification.
-type ChannelResponseDefinitionSeverity struct {
+// Constants associated with the ChannelAlertSourceItem.ProviderName property.
+// The providers that you can receive alerts for. To view your available providers, you can call the
+// /v1/{account_id}/providers endpoint of the Findings API.
+const (
+	ChannelAlertSourceItem_ProviderName_All  = "ALL"
+	ChannelAlertSourceItem_ProviderName_Ata  = "ATA"
+	ChannelAlertSourceItem_ProviderName_Cert = "CERT"
+	ChannelAlertSourceItem_ProviderName_Na   = "NA"
+	ChannelAlertSourceItem_ProviderName_Va   = "VA"
+)
 
-	// Critical Severity.
-	Critical *bool `json:"critical,omitempty"`
-
-	// High Severity.
-	High *bool `json:"high,omitempty"`
-
-	// Medium Severity.
-	Medium *bool `json:"medium,omitempty"`
-
-	// Low Severity.
-	Low *bool `json:"low,omitempty"`
+// UnmarshalChannelAlertSourceItem unmarshals an instance of ChannelAlertSourceItem from the specified map of raw messages.
+func UnmarshalChannelAlertSourceItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ChannelAlertSourceItem)
+	err = core.UnmarshalPrimitive(m, "provider_name", &obj.ProviderName)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "finding_types", &obj.FindingTypes)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
 }
 
-// CreateNotificationChannelOptions : The CreateNotificationChannel options.
-type CreateNotificationChannelOptions struct {
+// ChannelDelete : The returned response when a channel is deleted.
+type ChannelDelete struct {
+	// The ID of the deleted channel.
+	ChannelID *string `json:"channel_id,omitempty"`
 
-	// Account ID.
-	AccountID *string `json:"account_id" validate:"omitempty"`
+	// response message.
+	Message *string `json:"message,omitempty"`
+}
 
-	Name *string `json:"name" validate:"required"`
+// UnmarshalChannelDelete unmarshals an instance of ChannelDelete from the specified map of raw messages.
+func UnmarshalChannelDelete(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ChannelDelete)
+	err = core.UnmarshalPrimitive(m, "channel_id", &obj.ChannelID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "message", &obj.Message)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
 
-	// Type of callback URL.
-	Type *string `json:"type" validate:"required"`
+// ChannelGet : The returned response when get channel is run.
+type ChannelGet struct {
+	// Response including channels.
+	Channel *ChannelGetChannel `json:"channel,omitempty"`
+}
 
-	// The callback URL which receives the notification.
-	Endpoint *string `json:"endpoint" validate:"required"`
+// UnmarshalChannelGet unmarshals an instance of ChannelGet from the specified map of raw messages.
+func UnmarshalChannelGet(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ChannelGet)
+	err = core.UnmarshalModel(m, "channel", &obj.Channel, UnmarshalChannelGetChannel)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ChannelGetChannel : Response including channels.
+type ChannelGetChannel struct {
+	// A unique ID for the channel.
+	ChannelID *string `json:"channel_id,omitempty"`
+
+	Name *string `json:"name,omitempty"`
 
 	// A one sentence description of this `Channel`.
 	Description *string `json:"description,omitempty"`
 
-	// Severity of the notification to be received.
-	Severity []string `json:"severity,omitempty"`
+	// Type of callback URL.
+	Type *string `json:"type,omitempty"`
 
-	// Channel is enabled or not. Default is disabled.
+	// The severity of the notification.
+	Severity *ChannelGetChannelSeverity `json:"severity,omitempty"`
+
+	// The callback URL which receives the notification.
+	Endpoint *string `json:"endpoint,omitempty"`
+
+	// Whether the channel is enabled. The default is disabled.
 	Enabled *bool `json:"enabled,omitempty"`
 
-	AlertSource []NotificationChannelAlertSourceItem `json:"alert_source,omitempty"`
+	AlertSource []ChannelGetChannelAlertSourceItem `json:"alert_source,omitempty"`
 
-	// Allows users to set headers to be GDPR compliant
+	Frequency *string `json:"frequency,omitempty"`
+}
+
+// Constants associated with the ChannelGetChannel.Type property.
+// Type of callback URL.
+const (
+	ChannelGetChannel_Type_Webhook = "Webhook"
+)
+
+// UnmarshalChannelGetChannel unmarshals an instance of ChannelGetChannel from the specified map of raw messages.
+func UnmarshalChannelGetChannel(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ChannelGetChannel)
+	err = core.UnmarshalPrimitive(m, "channel_id", &obj.ChannelID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "description", &obj.Description)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "severity", &obj.Severity, UnmarshalChannelGetChannelSeverity)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "endpoint", &obj.Endpoint)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "enabled", &obj.Enabled)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "alert_source", &obj.AlertSource, UnmarshalChannelGetChannelAlertSourceItem)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "frequency", &obj.Frequency)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ChannelGetChannelAlertSourceItem : The providers that act as alert sources and the potential findings that can be flagged as alerts.
+type ChannelGetChannelAlertSourceItem struct {
+	// The providers that you can receive alerts for. To view your available providers, you can call the
+	// /v1/{account_id}/providers endpoint of the Findings API.
+	ProviderName *string `json:"provider_name,omitempty"`
+
+	// The types of findings for each provider that you want to receive alerts for. Options are dependent upon the provider
+	// that you select. Depending on that selection, some available options include `image_with_vulnerabilities`,
+	// `anonym_server`, `server_suspected_ratio`, `appid`, `cos`, `expired_cert`, and `expiring_1day_cert`For a full list
+	// of available finding types, see [the docs](/docs/).
+	FindingTypes []interface{} `json:"finding_types,omitempty"`
+}
+
+// Constants associated with the ChannelGetChannelAlertSourceItem.ProviderName property.
+// The providers that you can receive alerts for. To view your available providers, you can call the
+// /v1/{account_id}/providers endpoint of the Findings API.
+const (
+	ChannelGetChannelAlertSourceItem_ProviderName_All  = "ALL"
+	ChannelGetChannelAlertSourceItem_ProviderName_Ata  = "ATA"
+	ChannelGetChannelAlertSourceItem_ProviderName_Cert = "CERT"
+	ChannelGetChannelAlertSourceItem_ProviderName_Na   = "NA"
+	ChannelGetChannelAlertSourceItem_ProviderName_Va   = "VA"
+)
+
+// UnmarshalChannelGetChannelAlertSourceItem unmarshals an instance of ChannelGetChannelAlertSourceItem from the specified map of raw messages.
+func UnmarshalChannelGetChannelAlertSourceItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ChannelGetChannelAlertSourceItem)
+	err = core.UnmarshalPrimitive(m, "provider_name", &obj.ProviderName)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "finding_types", &obj.FindingTypes)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ChannelGetChannelSeverity : The severity of the notification.
+type ChannelGetChannelSeverity struct {
+	// Critical severity.
+	Critical *bool `json:"critical,omitempty"`
+
+	// High severity.
+	High *bool `json:"high,omitempty"`
+
+	// Medium severity.
+	Medium *bool `json:"medium,omitempty"`
+
+	// Low severity.
+	Low *bool `json:"low,omitempty"`
+}
+
+// UnmarshalChannelGetChannelSeverity unmarshals an instance of ChannelGetChannelSeverity from the specified map of raw messages.
+func UnmarshalChannelGetChannelSeverity(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ChannelGetChannelSeverity)
+	err = core.UnmarshalPrimitive(m, "critical", &obj.Critical)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "high", &obj.High)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "medium", &obj.Medium)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "low", &obj.Low)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ChannelInfo : The returned response when a channel is created or updated.
+type ChannelInfo struct {
+	// The ID of the created channel.
+	ChannelID *string `json:"channel_id,omitempty"`
+
+	// response code.
+	StatusCode *int64 `json:"status_code,omitempty"`
+}
+
+// UnmarshalChannelInfo unmarshals an instance of ChannelInfo from the specified map of raw messages.
+func UnmarshalChannelInfo(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ChannelInfo)
+	err = core.UnmarshalPrimitive(m, "channel_id", &obj.ChannelID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "status_code", &obj.StatusCode)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ChannelSeverity : The severity of the notification.
+type ChannelSeverity struct {
+	// Critical severity.
+	Critical *bool `json:"critical,omitempty"`
+
+	// High severity.
+	High *bool `json:"high,omitempty"`
+
+	// Medium severity.
+	Medium *bool `json:"medium,omitempty"`
+
+	// Low severity.
+	Low *bool `json:"low,omitempty"`
+}
+
+// UnmarshalChannelSeverity unmarshals an instance of ChannelSeverity from the specified map of raw messages.
+func UnmarshalChannelSeverity(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ChannelSeverity)
+	err = core.UnmarshalPrimitive(m, "critical", &obj.Critical)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "high", &obj.High)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "medium", &obj.Medium)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "low", &obj.Low)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ChannelsDelete : The returned response when more than one channel is deleted.
+type ChannelsDelete struct {
+	// response message.
+	Message *string `json:"message,omitempty"`
+}
+
+// UnmarshalChannelsDelete unmarshals an instance of ChannelsDelete from the specified map of raw messages.
+func UnmarshalChannelsDelete(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ChannelsDelete)
+	err = core.UnmarshalPrimitive(m, "message", &obj.Message)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ChannelsList : Available channels in your account are listed.
+type ChannelsList struct {
+	Channels []Channel `json:"channels,omitempty"`
+}
+
+// UnmarshalChannelsList unmarshals an instance of ChannelsList from the specified map of raw messages.
+func UnmarshalChannelsList(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ChannelsList)
+	err = core.UnmarshalModel(m, "channels", &obj.Channels, UnmarshalChannel)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// CreateNotificationChannelOptions : The CreateNotificationChannel options.
+type CreateNotificationChannelOptions struct {
+	// Account ID.
+	AccountID *string `validate:"required,ne="`
+
+	Name *string `validate:"required"`
+
+	// Type of callback URL.
+	Type *string `validate:"required"`
+
+	// The callback URL which receives the notification.
+	Endpoint *string `validate:"required"`
+
+	// A one sentence description of this `Channel`.
+	Description *string
+
+	// Severity of the notification to be received.
+	Severity []string
+
+	// Channel is enabled or not. Default is disabled.
+	Enabled *bool
+
+	AlertSource []NotificationChannelAlertSourceItem
+
+	// The transaction id for the request in uuid v4 format.
+	TransactionID *string
+
+	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
@@ -661,7 +1094,7 @@ const (
 )
 
 // NewCreateNotificationChannelOptions : Instantiate CreateNotificationChannelOptions
-func (notificationsApi *NotificationsApiV1) NewCreateNotificationChannelOptions(accountID string, name string, typeVar string, endpoint string) *CreateNotificationChannelOptions {
+func (*NotificationsApiV1) NewCreateNotificationChannelOptions(accountID string, name string, typeVar string, endpoint string) *CreateNotificationChannelOptions {
 	return &CreateNotificationChannelOptions{
 		AccountID: core.StringPtr(accountID),
 		Name:      core.StringPtr(name),
@@ -718,6 +1151,12 @@ func (options *CreateNotificationChannelOptions) SetAlertSource(alertSource []No
 	return options
 }
 
+// SetTransactionID : Allow user to set TransactionID
+func (options *CreateNotificationChannelOptions) SetTransactionID(transactionID string) *CreateNotificationChannelOptions {
+	options.TransactionID = core.StringPtr(transactionID)
+	return options
+}
+
 // SetHeaders : Allow user to set Headers
 func (options *CreateNotificationChannelOptions) SetHeaders(param map[string]string) *CreateNotificationChannelOptions {
 	options.Headers = param
@@ -726,19 +1165,21 @@ func (options *CreateNotificationChannelOptions) SetHeaders(param map[string]str
 
 // DeleteNotificationChannelOptions : The DeleteNotificationChannel options.
 type DeleteNotificationChannelOptions struct {
-
 	// Account ID.
-	AccountID *string `json:"account_id" validate:"required"`
+	AccountID *string `validate:"required,ne="`
 
 	// Channel ID.
-	ChannelID *string `json:"channel_id" validate:"required"`
+	ChannelID *string `validate:"required,ne="`
 
-	// Allows users to set headers to be GDPR compliant
+	// The transaction id for the request in uuid v4 format.
+	TransactionID *string
+
+	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewDeleteNotificationChannelOptions : Instantiate DeleteNotificationChannelOptions
-func (notificationsApi *NotificationsApiV1) NewDeleteNotificationChannelOptions(accountID string, channelID string) *DeleteNotificationChannelOptions {
+func (*NotificationsApiV1) NewDeleteNotificationChannelOptions(accountID string, channelID string) *DeleteNotificationChannelOptions {
 	return &DeleteNotificationChannelOptions{
 		AccountID: core.StringPtr(accountID),
 		ChannelID: core.StringPtr(channelID),
@@ -757,6 +1198,12 @@ func (options *DeleteNotificationChannelOptions) SetChannelID(channelID string) 
 	return options
 }
 
+// SetTransactionID : Allow user to set TransactionID
+func (options *DeleteNotificationChannelOptions) SetTransactionID(transactionID string) *DeleteNotificationChannelOptions {
+	options.TransactionID = core.StringPtr(transactionID)
+	return options
+}
+
 // SetHeaders : Allow user to set Headers
 func (options *DeleteNotificationChannelOptions) SetHeaders(param map[string]string) *DeleteNotificationChannelOptions {
 	options.Headers = param
@@ -765,19 +1212,21 @@ func (options *DeleteNotificationChannelOptions) SetHeaders(param map[string]str
 
 // DeleteNotificationChannelsOptions : The DeleteNotificationChannels options.
 type DeleteNotificationChannelsOptions struct {
-
 	// Account ID.
-	AccountID *string `json:"account_id" validate:"required"`
+	AccountID *string `validate:"required,ne="`
 
 	// Body for bulk delete notification channels.
-	Body []string `json:"body" validate:"required"`
+	Body []string `validate:"required"`
 
-	// Allows users to set headers to be GDPR compliant
+	// The transaction id for the request in uuid v4 format.
+	TransactionID *string
+
+	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewDeleteNotificationChannelsOptions : Instantiate DeleteNotificationChannelsOptions
-func (notificationsApi *NotificationsApiV1) NewDeleteNotificationChannelsOptions(accountID string, body []string) *DeleteNotificationChannelsOptions {
+func (*NotificationsApiV1) NewDeleteNotificationChannelsOptions(accountID string, body []string) *DeleteNotificationChannelsOptions {
 	return &DeleteNotificationChannelsOptions{
 		AccountID: core.StringPtr(accountID),
 		Body:      body,
@@ -796,6 +1245,12 @@ func (options *DeleteNotificationChannelsOptions) SetBody(body []string) *Delete
 	return options
 }
 
+// SetTransactionID : Allow user to set TransactionID
+func (options *DeleteNotificationChannelsOptions) SetTransactionID(transactionID string) *DeleteNotificationChannelsOptions {
+	options.TransactionID = core.StringPtr(transactionID)
+	return options
+}
+
 // SetHeaders : Allow user to set Headers
 func (options *DeleteNotificationChannelsOptions) SetHeaders(param map[string]string) *DeleteNotificationChannelsOptions {
 	options.Headers = param
@@ -804,19 +1259,21 @@ func (options *DeleteNotificationChannelsOptions) SetHeaders(param map[string]st
 
 // GetNotificationChannelOptions : The GetNotificationChannel options.
 type GetNotificationChannelOptions struct {
-
 	// Account ID.
-	AccountID *string `json:"account_id" validate:"required"`
+	AccountID *string `validate:"required,ne="`
 
 	// Channel ID.
-	ChannelID *string `json:"channel_id" validate:"required"`
+	ChannelID *string `validate:"required,ne="`
 
-	// Allows users to set headers to be GDPR compliant
+	// The transaction id for the request in uuid v4 format.
+	TransactionID *string
+
+	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewGetNotificationChannelOptions : Instantiate GetNotificationChannelOptions
-func (notificationsApi *NotificationsApiV1) NewGetNotificationChannelOptions(accountID string, channelID string) *GetNotificationChannelOptions {
+func (*NotificationsApiV1) NewGetNotificationChannelOptions(accountID string, channelID string) *GetNotificationChannelOptions {
 	return &GetNotificationChannelOptions{
 		AccountID: core.StringPtr(accountID),
 		ChannelID: core.StringPtr(channelID),
@@ -835,6 +1292,12 @@ func (options *GetNotificationChannelOptions) SetChannelID(channelID string) *Ge
 	return options
 }
 
+// SetTransactionID : Allow user to set TransactionID
+func (options *GetNotificationChannelOptions) SetTransactionID(transactionID string) *GetNotificationChannelOptions {
+	options.TransactionID = core.StringPtr(transactionID)
+	return options
+}
+
 // SetHeaders : Allow user to set Headers
 func (options *GetNotificationChannelOptions) SetHeaders(param map[string]string) *GetNotificationChannelOptions {
 	options.Headers = param
@@ -843,16 +1306,18 @@ func (options *GetNotificationChannelOptions) SetHeaders(param map[string]string
 
 // GetPublicKeyOptions : The GetPublicKey options.
 type GetPublicKeyOptions struct {
-
 	// Account ID.
-	AccountID *string `json:"account_id" validate:"required"`
+	AccountID *string `validate:"required,ne="`
 
-	// Allows users to set headers to be GDPR compliant
+	// The transaction id for the request in uuid v4 format.
+	TransactionID *string
+
+	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewGetPublicKeyOptions : Instantiate GetPublicKeyOptions
-func (notificationsApi *NotificationsApiV1) NewGetPublicKeyOptions(accountID string) *GetPublicKeyOptions {
+func (*NotificationsApiV1) NewGetPublicKeyOptions(accountID string) *GetPublicKeyOptions {
 	return &GetPublicKeyOptions{
 		AccountID: core.StringPtr(accountID),
 	}
@@ -864,6 +1329,12 @@ func (options *GetPublicKeyOptions) SetAccountID(accountID string) *GetPublicKey
 	return options
 }
 
+// SetTransactionID : Allow user to set TransactionID
+func (options *GetPublicKeyOptions) SetTransactionID(transactionID string) *GetPublicKeyOptions {
+	options.TransactionID = core.StringPtr(transactionID)
+	return options
+}
+
 // SetHeaders : Allow user to set Headers
 func (options *GetPublicKeyOptions) SetHeaders(param map[string]string) *GetPublicKeyOptions {
 	options.Headers = param
@@ -872,22 +1343,24 @@ func (options *GetPublicKeyOptions) SetHeaders(param map[string]string) *GetPubl
 
 // ListAllChannelsOptions : The ListAllChannels options.
 type ListAllChannelsOptions struct {
-
 	// Account ID.
-	AccountID *string `json:"account_id" validate:"required"`
+	AccountID *string `validate:"required,ne="`
+
+	// The transaction id for the request in uuid v4 format.
+	TransactionID *string
 
 	// Limit the number of the returned documents to the specified number.
-	Limit *int64 `json:"limit,omitempty"`
+	Limit *int64
 
 	// The offset is the index of the item from which you want to start returning data from. Default is 0.
-	Skip *int64 `json:"skip,omitempty"`
+	Skip *int64
 
-	// Allows users to set headers to be GDPR compliant
+	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewListAllChannelsOptions : Instantiate ListAllChannelsOptions
-func (notificationsApi *NotificationsApiV1) NewListAllChannelsOptions(accountID string) *ListAllChannelsOptions {
+func (*NotificationsApiV1) NewListAllChannelsOptions(accountID string) *ListAllChannelsOptions {
 	return &ListAllChannelsOptions{
 		AccountID: core.StringPtr(accountID),
 	}
@@ -896,6 +1369,12 @@ func (notificationsApi *NotificationsApiV1) NewListAllChannelsOptions(accountID 
 // SetAccountID : Allow user to set AccountID
 func (options *ListAllChannelsOptions) SetAccountID(accountID string) *ListAllChannelsOptions {
 	options.AccountID = core.StringPtr(accountID)
+	return options
+}
+
+// SetTransactionID : Allow user to set TransactionID
+func (options *ListAllChannelsOptions) SetTransactionID(transactionID string) *ListAllChannelsOptions {
+	options.TransactionID = core.StringPtr(transactionID)
 	return options
 }
 
@@ -920,7 +1399,6 @@ func (options *ListAllChannelsOptions) SetHeaders(param map[string]string) *List
 // NotificationChannelAlertSourceItem : The alert sources. They identify the providers and their finding types which makes the findings available to Security
 // Advisor.
 type NotificationChannelAlertSourceItem struct {
-
 	// Below is a list of builtin providers that you can select in addition to the ones you obtain by calling Findings API
 	// /v1/{account_id}/providers :
 	//  | provider_name | The source they represent |
@@ -943,18 +1421,12 @@ type NotificationChannelAlertSourceItem struct {
 	// | ATA | "appid", "cos", "iks", "iam", "kms", "cert", "account", "app"|
 	// | CERT | "expired_cert", "expiring_1day_cert", "expiring_10day_cert", "expiring_30day_cert", "expiring_60day_cert",
 	// "expiring_90day_cert"|
-	// | config-advisor | "appprotection-dns_not_proxied", "appprotection-dnssec_off", "appprotection-ssl_not_strict",
-	// "appprotection-tls_min_version", "appprotection-waf_off", "appprotection-waf_rules", "calico-deny_all_rule",
-	// "calico-nonstandard_ports", "calico-update_cis_whitelist", "datacos-cos_managers", "datacos-not_encrypted_via_kp",
-	// "datacos-not_in_private_network", "datacos-public_bucket_acl", "datacos-public_bucket_iam",
-	// "datacos-public_object_acl", "iam-account_admins", "iam-all_resource_managers", "iam-all_resource_readers",
-	// "iam-identity_admins", "iam-kms_managers", "iam-out_of_group"|
 	// | ALL | "ALL"|.
 	FindingTypes []string `json:"finding_types,omitempty"`
 }
 
 // NewNotificationChannelAlertSourceItem : Instantiate NotificationChannelAlertSourceItem (Generic Model Constructor)
-func (notificationsApi *NotificationsApiV1) NewNotificationChannelAlertSourceItem(providerName string) (model *NotificationChannelAlertSourceItem, err error) {
+func (*NotificationsApiV1) NewNotificationChannelAlertSourceItem(providerName string) (model *NotificationChannelAlertSourceItem, err error) {
 	model = &NotificationChannelAlertSourceItem{
 		ProviderName: core.StringPtr(providerName),
 	}
@@ -962,21 +1434,71 @@ func (notificationsApi *NotificationsApiV1) NewNotificationChannelAlertSourceIte
 	return
 }
 
+// UnmarshalNotificationChannelAlertSourceItem unmarshals an instance of NotificationChannelAlertSourceItem from the specified map of raw messages.
+func UnmarshalNotificationChannelAlertSourceItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(NotificationChannelAlertSourceItem)
+	err = core.UnmarshalPrimitive(m, "provider_name", &obj.ProviderName)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "finding_types", &obj.FindingTypes)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// PublicKeyGet : PublicKeyGet struct
+type PublicKeyGet struct {
+	PublicKey *string `json:"public_key" validate:"required"`
+}
+
+// UnmarshalPublicKeyGet unmarshals an instance of PublicKeyGet from the specified map of raw messages.
+func UnmarshalPublicKeyGet(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(PublicKeyGet)
+	err = core.UnmarshalPrimitive(m, "public_key", &obj.PublicKey)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// TestChannel : The returned response when a webhook is tested for a channel.
+type TestChannel struct {
+	// response status.
+	Test *string `json:"test,omitempty"`
+}
+
+// UnmarshalTestChannel unmarshals an instance of TestChannel from the specified map of raw messages.
+func UnmarshalTestChannel(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(TestChannel)
+	err = core.UnmarshalPrimitive(m, "test", &obj.Test)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // TestNotificationChannelOptions : The TestNotificationChannel options.
 type TestNotificationChannelOptions struct {
-
 	// Account ID.
-	AccountID *string `json:"account_id" validate:"required"`
+	AccountID *string `validate:"required,ne="`
 
 	// Channel ID.
-	ChannelID *string `json:"channel_id" validate:"required"`
+	ChannelID *string `validate:"required,ne="`
 
-	// Allows users to set headers to be GDPR compliant
+	// The transaction id for the request in uuid v4 format.
+	TransactionID *string
+
+	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewTestNotificationChannelOptions : Instantiate TestNotificationChannelOptions
-func (notificationsApi *NotificationsApiV1) NewTestNotificationChannelOptions(accountID string, channelID string) *TestNotificationChannelOptions {
+func (*NotificationsApiV1) NewTestNotificationChannelOptions(accountID string, channelID string) *TestNotificationChannelOptions {
 	return &TestNotificationChannelOptions{
 		AccountID: core.StringPtr(accountID),
 		ChannelID: core.StringPtr(channelID),
@@ -995,6 +1517,12 @@ func (options *TestNotificationChannelOptions) SetChannelID(channelID string) *T
 	return options
 }
 
+// SetTransactionID : Allow user to set TransactionID
+func (options *TestNotificationChannelOptions) SetTransactionID(transactionID string) *TestNotificationChannelOptions {
+	options.TransactionID = core.StringPtr(transactionID)
+	return options
+}
+
 // SetHeaders : Allow user to set Headers
 func (options *TestNotificationChannelOptions) SetHeaders(param map[string]string) *TestNotificationChannelOptions {
 	options.Headers = param
@@ -1003,33 +1531,35 @@ func (options *TestNotificationChannelOptions) SetHeaders(param map[string]strin
 
 // UpdateNotificationChannelOptions : The UpdateNotificationChannel options.
 type UpdateNotificationChannelOptions struct {
-
 	// Account ID.
-	AccountID *string `json:"account_id" validate:"required"`
+	AccountID *string `validate:"required,ne="`
 
 	// Channel ID.
-	ChannelID *string `json:"channel_id" validate:"required"`
+	ChannelID *string `validate:"required,ne="`
 
-	Name *string `json:"name" validate:"required"`
+	Name *string `validate:"required"`
 
 	// Type of callback URL.
-	Type *string `json:"type" validate:"required"`
+	Type *string `validate:"required"`
 
 	// The callback URL which receives the notification.
-	Endpoint *string `json:"endpoint" validate:"required"`
+	Endpoint *string `validate:"required"`
 
 	// A one sentence description of this `Channel`.
-	Description *string `json:"description,omitempty"`
+	Description *string
 
 	// Severity of the notification to be received.
-	Severity []string `json:"severity,omitempty"`
+	Severity []string
 
 	// Channel is enabled or not. Default is disabled.
-	Enabled *bool `json:"enabled,omitempty"`
+	Enabled *bool
 
-	AlertSource []NotificationChannelAlertSourceItem `json:"alert_source,omitempty"`
+	AlertSource []NotificationChannelAlertSourceItem
 
-	// Allows users to set headers to be GDPR compliant
+	// The transaction id for the request in uuid v4 format.
+	TransactionID *string
+
+	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
@@ -1048,7 +1578,7 @@ const (
 )
 
 // NewUpdateNotificationChannelOptions : Instantiate UpdateNotificationChannelOptions
-func (notificationsApi *NotificationsApiV1) NewUpdateNotificationChannelOptions(accountID string, channelID string, name string, typeVar string, endpoint string) *UpdateNotificationChannelOptions {
+func (*NotificationsApiV1) NewUpdateNotificationChannelOptions(accountID string, channelID string, name string, typeVar string, endpoint string) *UpdateNotificationChannelOptions {
 	return &UpdateNotificationChannelOptions{
 		AccountID: core.StringPtr(accountID),
 		ChannelID: core.StringPtr(channelID),
@@ -1112,23 +1642,21 @@ func (options *UpdateNotificationChannelOptions) SetAlertSource(alertSource []No
 	return options
 }
 
+// SetTransactionID : Allow user to set TransactionID
+func (options *UpdateNotificationChannelOptions) SetTransactionID(transactionID string) *UpdateNotificationChannelOptions {
+	options.TransactionID = core.StringPtr(transactionID)
+	return options
+}
+
 // SetHeaders : Allow user to set Headers
 func (options *UpdateNotificationChannelOptions) SetHeaders(param map[string]string) *UpdateNotificationChannelOptions {
 	options.Headers = param
 	return options
 }
 
-// BulkDeleteChannelsResponse : Response of all deleted channels.
-type BulkDeleteChannelsResponse struct {
-
-	// response message.
-	Message *string `json:"message,omitempty"`
-}
-
-// ChannelResponseDefinition : Response including channels.
-type ChannelResponseDefinition struct {
-
-	// unique id of the channel.
+// Channel : Response including channels.
+type Channel struct {
+	// A unique ID for the channel.
 	ChannelID *string `json:"channel_id,omitempty"`
 
 	Name *string `json:"name,omitempty"`
@@ -1139,76 +1667,65 @@ type ChannelResponseDefinition struct {
 	// Type of callback URL.
 	Type *string `json:"type,omitempty"`
 
-	// Severity of the notification.
-	Severity *ChannelResponseDefinitionSeverity `json:"severity,omitempty"`
+	// The severity of the notification.
+	Severity *ChannelSeverity `json:"severity,omitempty"`
 
 	// The callback URL which receives the notification.
 	Endpoint *string `json:"endpoint,omitempty"`
 
-	// Channel is enabled or not. Default is disabled.
+	// Whether the channel is enabled. The default is disabled.
 	Enabled *bool `json:"enabled,omitempty"`
 
-	AlertSource []ChannelResponseDefinitionAlertSourceItem `json:"alert_source,omitempty"`
+	AlertSource []ChannelAlertSourceItem `json:"alert_source,omitempty"`
 
 	Frequency *string `json:"frequency,omitempty"`
 }
 
-// Constants associated with the ChannelResponseDefinition.Type property.
+// Constants associated with the Channel.Type property.
 // Type of callback URL.
 const (
-	ChannelResponseDefinition_Type_Webhook = "Webhook"
+	Channel_Type_Webhook = "Webhook"
 )
 
-// CreateChannelsResponse : Response of created channel.
-type CreateChannelsResponse struct {
-
-	// id of the created channel.
-	ChannelID *string `json:"channel_id,omitempty"`
-
-	// response code.
-	StatusCode *int64 `json:"status_code,omitempty"`
-}
-
-// DeleteChannelResponse : Response of deleted channel.
-type DeleteChannelResponse struct {
-
-	// id of the created channel.
-	ChannelID *string `json:"channel_id,omitempty"`
-
-	// response message.
-	Message *string `json:"message,omitempty"`
-}
-
-// GetChannelResponse : Response of get channel.
-type GetChannelResponse struct {
-
-	// Response including channels.
-	Channel *ChannelResponseDefinition `json:"channel,omitempty"`
-}
-
-// ListChannelsResponse : Response including channels.
-type ListChannelsResponse struct {
-	Channels []ChannelResponseDefinition `json:"channels,omitempty"`
-}
-
-// PublicKeyResponse : PublicKeyResponse struct
-type PublicKeyResponse struct {
-	PublicKey *string `json:"public_key" validate:"required"`
-}
-
-// TestChannelResponse : Response of deleted channel.
-type TestChannelResponse struct {
-
-	// response status.
-	Test *string `json:"test,omitempty"`
-}
-
-// UpdateChannelResponse : Response of updated channel.
-type UpdateChannelResponse struct {
-
-	// id of the updated channel.
-	ChannelID *string `json:"channel_id,omitempty"`
-
-	// response code.
-	StatusCode *int64 `json:"status_code,omitempty"`
+// UnmarshalChannel unmarshals an instance of Channel from the specified map of raw messages.
+func UnmarshalChannel(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(Channel)
+	err = core.UnmarshalPrimitive(m, "channel_id", &obj.ChannelID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "description", &obj.Description)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "severity", &obj.Severity, UnmarshalChannelSeverity)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "endpoint", &obj.Endpoint)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "enabled", &obj.Enabled)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "alert_source", &obj.AlertSource, UnmarshalChannelAlertSourceItem)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "frequency", &obj.Frequency)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
 }
