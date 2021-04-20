@@ -3,8 +3,8 @@ package examples
 import (
 	"fmt"
 
-	"github.com/IBM/go-sdk-core/v3/core"
-	"github.com/ibm-cloud-security/security-advisor-sdk-go/v2/notificationsapiv1"
+	"github.com/IBM/go-sdk-core/v5/core"
+	"github.com/ibm-cloud-security/security-advisor-sdk-go/v3/notificationsapiv1"
 )
 
 //DeleteChannels bulk deletes channels
