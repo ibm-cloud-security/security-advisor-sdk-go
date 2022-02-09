@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/IBM/go-sdk-core/v3/core"
+	"github.com/IBM/go-sdk-core/v5/core"
 	"github.com/go-openapi/strfmt"
 	common "github.com/ibm-cloud-security/security-advisor-sdk-go/v3/common"
 )

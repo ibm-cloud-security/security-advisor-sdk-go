@@ -12,11 +12,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/IBM/go-sdk-core/v3/core"
+	"github.com/IBM/go-sdk-core/v5/core"
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/ibm-cloud-security/security-advisor-sdk-go/v2/notificationsapiv1"
+	"github.com/ibm-cloud-security/security-advisor-sdk-go/v3/notificationsapiv1"
 )
 
 var apiKey = os.Getenv("apiKey")
@@ -39,7 +39,7 @@ func shouldSkipTest(t *testing.T) {
 	}
 }
 
-func createChannelHelper(t *testing.T, path string) (*notificationsapiv1.CreateChannelsResponse, *notificationsapiv1.CreateNotificationChannelOptions, error) {
+func createChannelHelper(t *testing.T, path string) (*notificationsapiv1.ChannelInfo, *notificationsapiv1.CreateNotificationChannelOptions, error) {
 	headers := make(map[string]string)
 	headers["Content-Type"] = "application/json"
 

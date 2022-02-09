@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/IBM/go-sdk-core/v3/core"
+	"github.com/IBM/go-sdk-core/v5/core"
 	"github.com/go-openapi/strfmt"
 	"github.com/ibm-cloud-security/security-advisor-sdk-go/v3/findingsapiv1"
 	"github.com/joho/godotenv"
