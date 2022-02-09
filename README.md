@@ -110,7 +110,7 @@ To provide credentials to the SDK, you supply either an IAM service **API key** 
 
 ```go
 import (
-  "github.com/IBM/go-sdk-core/v3/core"
+  "github.com/IBM/go-sdk-core/v5/core"
   "github.com/ibm-cloud-security/security-advisor-sdk-go/v3/findingsapiv1"
   "github.com/ibm-cloud-security/security-advisor-sdk-go/v3/notificationsapiv1"
 )
@@ -140,7 +140,7 @@ For example, to send a header called `Custom-Header` to a call in  `notification
 
 ```go
 import (
-  "github.com/IBM/go-sdk-core/v3/core"
+  "github.com/IBM/go-sdk-core/v5/core"
   "github.com/ibm-cloud-security/security-advisor-sdk-go/v3/notificationsapiv1"
 )
 
@@ -168,7 +168,7 @@ If the method receives an error response from an API call to the service, it wil
 import (
  "fmt"
 
- "github.com/IBM/go-sdk-core/v3/core"
+ "github.com/IBM/go-sdk-core/v5/core"
  "github.com/ibm-cloud-security/security-advisor-sdk-go/v3/findingsapiv1"
 )
 
@@ -212,7 +212,7 @@ map[
 import (
  "fmt"
 
- "github.com/IBM/go-sdk-core/v3/core"
+ "github.com/IBM/go-sdk-core/v5/core"
  "github.com/ibm-cloud-security/security-advisor-sdk-go/v3/notificationsapiv1"
 )
 
