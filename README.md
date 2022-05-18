@@ -1,5 +1,5 @@
 # DEPRECATED
-Please migrate to new SDK https://github.com/IBM/scc-go-sdk
+The Security Insights feature is deprecated and will no longer be supported. Please migrate to new SDK https://github.com/IBM/scc-go-sdk
 
 [![Build Status](https://api.travis-ci.org/ibm-cloud-security/security-advisor-sdk-go.svg?branch=master)](https://travis-ci.org/github/ibm-cloud-security/security-advisor-sdk-go)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
